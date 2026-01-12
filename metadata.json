@@ -1,0 +1,8 @@
+
+{
+  "name": "Gemini Watch Prototype",
+  "description": "A high-fidelity watch application prototype featuring an animated smiley, race detection alerts, and haptic feedback simulation.",
+  "requestFramePermissions": [
+    "vibrate"
+  ]
+}
