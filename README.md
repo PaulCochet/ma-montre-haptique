@@ -1,60 +1,162 @@
 
-<!DOCTYPE html>
-<html>
-    <head>
-        <title>Une page HTML vierge</title>
-        <meta charset="utf-8" />
-    </head>
-    <body>
-        <div style="width: 187px; height: 223px; padding-top: 6px; padding-bottom: 12px; padding-left: 12px; padding-right: 12px; position: relative; background: white; overflow: hidden; flex-direction: column; justify-content: flex-end; align-items: center; gap: 10px; display: inline-flex">
-  <div style="width: 562px; height: 413.37px; left: -145px; top: -133px; position: absolute">
-    <div style="width: 228px; height: 208px; left: 461px; top: 282px; position: absolute; transform: rotate(180deg); transform-origin: top left; background: linear-gradient(173deg, #2ABCFF 0%, rgba(42, 188, 255, 0.60) 100%); box-shadow: 49.79999923706055px 49.79999923706055px 49.79999923706055px; filter: blur(24.90px)"></div>
-    <div style="width: 333px; height: 174px; left: 414px; top: 250px; position: absolute; transform: rotate(-180deg); transform-origin: top left; background: rgba(42, 187.55, 255, 0.60); box-shadow: 49.79999923706055px 49.79999923706055px 49.79999923706055px; filter: blur(24.90px)"></div>
-    <div style="width: 243px; height: 224px; left: 22px; top: 76px; position: absolute; background: linear-gradient(170deg, #2ABCFF 0%, rgba(42, 188, 255, 0.60) 100%); box-shadow: 49.79999923706055px 49.79999923706055px 49.79999923706055px; filter: blur(24.90px)"></div>
-    <div style="width: 406px; height: 177px; left: 43px; top: 161px; position: absolute; background: linear-gradient(180deg, rgba(255, 255, 255, 0.72) 0%, rgba(255, 255, 255, 0.45) 100%); box-shadow: 49.79999923706055px 49.79999923706055px 49.79999923706055px; border-radius: 9999px; filter: blur(24.90px)"></div>
-  </div>
-  <div style="align-self: stretch; flex: 1 1 0; position: relative; flex-direction: column; justify-content: space-between; align-items: flex-end; display: flex">
-    <div style="align-self: stretch; justify-content: space-between; align-items: center; display: inline-flex">
-      <div data-property-1="Default" style="width: 32px; padding-left: 3px; padding-right: 3px; padding-top: 4px; padding-bottom: 4px; background: rgba(255, 255, 255, 0.70); overflow: hidden; border-radius: 30px; justify-content: center; align-items: center; gap: 10px; display: flex">
-        <div style="width: 24px; height: 24px; position: relative">
-          <div style="width: 24px; height: 24px; left: 0px; top: 0px; position: absolute; background: #D9D9D9"></div>
-          <div style="width: 14px; height: 14px; left: 5px; top: 5px; position: absolute; background: #057CFE"></div>
-        </div>
-      </div>
-      <div style="width: 31px; height: 36px"></div>
-    </div>
-    <div style="align-self: stretch; height: 139px; flex-direction: column; justify-content: flex-end; align-items: flex-start; gap: 16px; display: flex">
-      <div style="align-self: stretch; flex-direction: column; justify-content: flex-start; align-items: flex-start; gap: 4px; display: flex">
-        <div style="width: 163px; text-align: center; justify-content: center; display: flex; flex-direction: column; color: black; font-size: 14px; font-family: HONOR Sans VF; font-weight: 600; letter-spacing: 0.07px; word-wrap: break-word">Race detected</div>
-      </div>
-      <div style="align-self: stretch; justify-content: center; align-items: center; gap: 16px; display: inline-flex">
-        <div style="flex: 1 1 0; height: 52px; position: relative">
-          <div style="width: 163px; padding-left: 16px; padding-right: 16px; padding-top: 14px; padding-bottom: 14px; left: 0px; top: 0px; position: absolute; box-shadow: 8px 8px 8px; border-radius: 12px; outline: 2.87px #2ADFFF solid; outline-offset: -2.87px; filter: blur(4px); justify-content: center; align-items: center; gap: 4px; display: inline-flex">
-            <div style="width: 24px; height: 24px; position: relative">
-              <div style="width: 24px; height: 24px; left: 0px; top: 0px; position: absolute; background: #D9D9D9"></div>
-              <div style="width: 19px; height: 20px; left: 3px; top: 2px; position: absolute; background: black"></div>
-            </div>
-            <div data-property-1="Start" style="width: 155px; height: 52px; left: 0px; top: 0px; position: absolute; opacity: 0.10">
-              <div style="width: 155px; height: 52px; left: 0px; top: 0px; position: absolute; box-shadow: 2px 2px 2px; border-top-left-radius: 20px; border-top-right-radius: 20px; border: 2px #D6F6DF solid; filter: blur(1px)"></div>
-              <div style="width: 155px; height: 52px; left: 0px; top: 0px; position: absolute; box-shadow: 4px 4px 4px; border-top-left-radius: 20px; border-top-right-radius: 20px; border: 5px #D6F6DF solid; filter: blur(2px)"></div>
-              <div style="width: 155px; height: 52px; left: 0px; top: 0px; position: absolute; box-shadow: 10px 10px 10px; border-top-left-radius: 20px; border-top-right-radius: 20px; border: 7px #D6F6DF solid; filter: blur(5px)"></div>
-            </div>
+import React, { useState, useEffect, useCallback } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import WatchDevice from './components/WatchDevice';
+import Smiley from './components/Smiley';
+import { AppState } from './types';
+import { detectActivity } from './services/gemini';
+
+const App: React.FC = () => {
+  const [appState, setAppState] = useState<AppState>(AppState.ALERT);
+  const [time, setTime] = useState(new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }));
+  const [isVibrating, setIsVibrating] = useState(false);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setTime(new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }));
+    }, 1000);
+    return () => clearInterval(timer);
+  }, []);
+
+  const triggerHaptic = useCallback((pattern: number | number[] = 100) => {
+    if (typeof navigator !== 'undefined' && navigator.vibrate) {
+      navigator.vibrate(pattern);
+    }
+    // Visual feedback for haptic
+    setIsVibrating(true);
+    setTimeout(() => setIsVibrating(false), 200);
+  }, []);
+
+  const handleStartRace = () => {
+    triggerHaptic([50, 30, 50]);
+    setAppState(AppState.ACTIVE);
+  };
+
+  const handleClose = () => {
+    triggerHaptic(20);
+    setAppState(AppState.IDLE);
+  };
+
+  const triggerDetection = async () => {
+    setAppState(AppState.DETECTING);
+    // Simulate complex data analysis with Gemini
+    const result = await detectActivity("Heart rate 160bpm, high acceleration, GPS moving at 12km/h");
+    if (result.detected) {
+      setAppState(AppState.ALERT);
+      triggerHaptic([100, 50, 100]);
+    } else {
+      setAppState(AppState.IDLE);
+    }
+  };
+
+  return (
+    <div className="flex flex-col items-center gap-8">
+      <WatchDevice>
+        <div className={`relative w-full h-full transition-all duration-300 ${isVibrating ? 'scale-105' : 'scale-100'} overflow-hidden`}>
+          
+          {/* Status Bar */}
+          <div className="absolute top-4 left-0 w-full px-8 flex justify-between items-center z-20 text-white font-medium text-sm">
+             <button onClick={handleClose} className="w-8 h-8 rounded-full bg-blue-100/20 backdrop-blur-md flex items-center justify-center active:scale-90 transition-transform">
+                <i className="fa-solid fa-xmark text-blue-400"></i>
+             </button>
+             <span>{time}</span>
           </div>
-          <div style="width: 163px; padding-left: 16px; padding-right: 16px; padding-top: 14px; padding-bottom: 14px; left: 0px; top: 0px; position: absolute; background: rgba(255, 255, 255, 0.70); overflow: hidden; border-radius: 12px; justify-content: center; align-items: center; gap: 4px; display: inline-flex">
-            <div style="width: 24px; height: 24px; position: relative">
-              <div style="width: 24px; height: 24px; left: 0px; top: 0px; position: absolute; background: #D9D9D9"></div>
-              <div style="width: 16px; height: 21.50px; left: 3px; top: 1.50px; position: absolute; background: black"></div>
-            </div>
-            <div style="justify-content: center; display: flex; flex-direction: column; color: black; font-size: 16px; font-family: HONOR Sans VF; font-weight: 500; word-wrap: break-word">Start</div>
-          </div>
+
+          <AnimatePresence mode="wait">
+            {appState === AppState.ALERT && (
+              <motion.div 
+                key="alert"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+                className="w-full h-full bg-gradient-to-b from-blue-200 to-white flex flex-col items-center justify-center p-6"
+              >
+                <div className="mt-8 flex-1 flex flex-col items-center justify-center">
+                  <Smiley mood="happy" />
+                  <h2 className="text-black text-2xl font-bold mt-4">Race detected</h2>
+                </div>
+
+                <motion.button
+                  whileTap={{ scale: 0.95 }}
+                  onClick={handleStartRace}
+                  className="w-full h-20 bg-white rounded-3xl shadow-xl flex items-center justify-center gap-3 mb-4 group overflow-hidden relative"
+                >
+                  <div className="absolute inset-0 bg-gradient-to-r from-blue-50 to-indigo-50 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                  <i className="fa-solid fa-person-running text-2xl text-black"></i>
+                  <span className="text-black text-2xl font-semibold">Start</span>
+                </motion.button>
+              </motion.div>
+            )}
+
+            {appState === AppState.IDLE && (
+              <motion.div 
+                key="idle"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                className="w-full h-full flex flex-col items-center justify-center p-6 text-center"
+              >
+                <i className="fa-solid fa-clock text-blue-500 text-5xl mb-4"></i>
+                <h3 className="text-white text-lg font-medium">Ready when you are</h3>
+                <button 
+                  onClick={triggerDetection}
+                  className="mt-6 px-6 py-2 bg-zinc-800 text-zinc-300 rounded-full text-sm border border-zinc-700"
+                >
+                  Simulate Activity
+                </button>
+              </motion.div>
+            )}
+
+            {appState === AppState.DETECTING && (
+              <motion.div 
+                key="detecting"
+                className="w-full h-full flex flex-col items-center justify-center p-6 text-center"
+              >
+                <motion.div
+                  animate={{ rotate: 360 }}
+                  transition={{ repeat: Infinity, duration: 2, ease: "linear" }}
+                  className="w-16 h-16 border-4 border-blue-500 border-t-transparent rounded-full mb-6"
+                />
+                <h3 className="text-white text-lg font-medium">AI Analyzing...</h3>
+                <p className="text-zinc-400 text-xs mt-2 px-4 italic">Using Gemini to process sensor patterns</p>
+              </motion.div>
+            )}
+
+            {appState === AppState.ACTIVE && (
+              <motion.div 
+                key="active"
+                className="w-full h-full bg-black flex flex-col items-center justify-center p-6"
+              >
+                <Smiley mood="active" />
+                <div className="mt-8 text-center">
+                  <span className="text-blue-500 text-5xl font-mono font-bold">00:04</span>
+                  <p className="text-zinc-400 text-sm mt-2 uppercase tracking-widest">Racing</p>
+                </div>
+                <button 
+                  onClick={() => setAppState(AppState.IDLE)}
+                  className="mt-8 w-16 h-16 rounded-full bg-red-500/20 flex items-center justify-center border border-red-500/30"
+                >
+                  <i className="fa-solid fa-stop text-red-500 text-xl"></i>
+                </button>
+              </motion.div>
+            )}
+          </AnimatePresence>
+
+          {/* Background Decorative Circles */}
+          <div className="absolute -bottom-20 -left-20 w-64 h-64 bg-blue-400/10 rounded-full blur-3xl pointer-events-none"></div>
+          <div className="absolute -top-20 -right-20 w-64 h-64 bg-indigo-400/10 rounded-full blur-3xl pointer-events-none"></div>
         </div>
+      </WatchDevice>
+
+      <div className="max-w-md text-zinc-500 text-center px-6">
+        <h1 className="text-white text-xl font-bold mb-2">Watch UI Prototype</h1>
+        <p className="text-sm">
+          Transitioned your Figma design to a functional React component. 
+          Features include an <strong>animated smiley</strong>, <strong>Gemini-powered</strong> activity detection simulation, 
+          and <strong>haptic feedback</strong> triggers (simulated visually and via Vibration API).
+        </p>
       </div>
     </div>
-    <div style="left: 139px; top: 0px; position: absolute; text-align: center; justify-content: center; display: flex; flex-direction: column; color: white; font-size: 12px; font-family: Inter; font-weight: 400; word-wrap: break-word">9:41</div>
-  </div>
-  <div style="width: 230px; height: 172px; left: -21px; top: 0px; position: absolute">
-    <img style="width: 230px; height: 172px; left: 0px; top: 0px; position: absolute" src="https://placehold.co/230x172" />
-  </div>
-</div>
-    </body>
-</html>
+  );
+};
+
+export default App;
