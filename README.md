@@ -1,4 +1,12 @@
-<div style="width: 187px; height: 223px; padding-top: 6px; padding-bottom: 12px; padding-left: 12px; padding-right: 12px; position: relative; background: white; overflow: hidden; flex-direction: column; justify-content: flex-end; align-items: center; gap: 10px; display: inline-flex">
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Une page HTML vierge</title>
+        <meta charset="utf-8" />
+    </head>
+    <body>
+        <div style="width: 187px; height: 223px; padding-top: 6px; padding-bottom: 12px; padding-left: 12px; padding-right: 12px; position: relative; background: white; overflow: hidden; flex-direction: column; justify-content: flex-end; align-items: center; gap: 10px; display: inline-flex">
   <div style="width: 562px; height: 413.37px; left: -145px; top: -133px; position: absolute">
     <div style="width: 228px; height: 208px; left: 461px; top: 282px; position: absolute; transform: rotate(180deg); transform-origin: top left; background: linear-gradient(173deg, #2ABCFF 0%, rgba(42, 188, 255, 0.60) 100%); box-shadow: 49.79999923706055px 49.79999923706055px 49.79999923706055px; filter: blur(24.90px)"></div>
     <div style="width: 333px; height: 174px; left: 414px; top: 250px; position: absolute; transform: rotate(-180deg); transform-origin: top left; background: rgba(42, 187.55, 255, 0.60); box-shadow: 49.79999923706055px 49.79999923706055px 49.79999923706055px; filter: blur(24.90px)"></div>
@@ -48,3 +56,5 @@
     <img style="width: 230px; height: 172px; left: 0px; top: 0px; position: absolute" src="https://placehold.co/230x172" />
   </div>
 </div>
+    </body>
+</html>
